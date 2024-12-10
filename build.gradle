@@ -1,0 +1,65 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'maven-publish'
+	id 'com.jfrog.artifactory' version '4.26.0'
+}
+
+group = 'com.djb'
+version = '0.0.2-SNAPSHOT'
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url = uri('https://tkwebtech.jfrog.io/artifactory/gradle-local/')
+		credentials {
+			username = 'kadt2022@gmail.com'
+			password = 'cmVmdGtuOjAxOjE3Mzk4MzI0MzM6ZmxTbkNRbmFRZTZ6ZEVaREZ2MlhmZnRBSW9W'
+		}
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			groupId = 'com.djb'
+			artifactId = 'my-math-library'
+			version = '0.0.2-SNAPSHOT'
+		}
+	}
+	repositories {
+		maven {
+			url = uri('https://tkwebtech.jfrog.io/artifactory/gradle-local/')
+			credentials {
+				username = 'kadt2022@gmail.com'
+				password = 'cmVmdGtuOjAxOjE3Mzk4MzI0MzM6ZmxTbkNRbmFRZTZ6ZEVaREZ2MlhmZnRBSW9W'
+			}
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
